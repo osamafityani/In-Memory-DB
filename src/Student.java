@@ -1,6 +1,6 @@
 public class Student {
 
-    private static int objectsCounter = 1;
+    public static int objectsCounter = 0;
 
     private int id;
     private String name;
@@ -8,12 +8,13 @@ public class Student {
     private double gpa;
 
     public Student(String name, String major, double gpa){
+        objectsCounter++;
         this.id = objectsCounter;
         this.name = name;
         this.major = major;
         this.gpa = gpa;
 
-        objectsCounter++;
+
     }
 
     public int getId() {
@@ -42,5 +43,10 @@ public class Student {
 
     public void setGpa(double gpa) {
         this.gpa = gpa;
+    }
+
+    @Override
+    public String toString() {
+        return "Id: " + this.id + " | " + "Name: " + this.name + " | " + "Major: " + this.major + " | " + "GPA: " + this.gpa;
     }
 }

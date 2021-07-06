@@ -2,10 +2,11 @@ import java.util.List;
 
 public class StudentDAOImpl implements StudentDAO {
 
+    Cache<Integer, Student> cache = Cache.getInstance(5);
 
     @Override
     public void insertStudent(Student student) {
-
+        cache.put(Student.objectsCounter, student);
     }
 
     @Override
@@ -15,7 +16,7 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public Student selectStudent(int id) {
-        return null;
+        return cache.get(id);
     }
 
     @Override
