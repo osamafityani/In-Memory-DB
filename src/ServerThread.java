@@ -86,8 +86,11 @@ class ServerThread extends Thread {
 
         out.println("Student's GPA:");
         double gpa = Double.parseDouble(in.readLine());
-
-        studentService.insertStudent(new Student(name, major, gpa));
+        Student student = new Student();
+        student.setName(name);
+        student.setMajor(major);
+        student.setGpa(gpa);
+        studentService.insertStudent(student);
         out.println("Student added successfully");
         out.println("=========================================");
     }

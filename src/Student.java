@@ -7,45 +7,40 @@ public class Student {
     private String major;
     private double gpa;
 
-    public Student(String name, String major, double gpa){
+    public Student(){
         objectsCounter++;
         this.id = objectsCounter;
-        this.name = name;
-        this.major = major;
-        this.gpa = gpa;
-
-
     }
 
-    public int getId() {
+    public synchronized int getId() {
         return id;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 
-    public String getMajor() {
+    public synchronized String getMajor() {
         return major;
     }
 
-    public double getGpa() {
+    public synchronized double getGpa() {
         return gpa;
     }
 
-    public void setName(String name) {
+    public synchronized void setName(String name) {
         this.name = name;
     }
 
-    public void setMajor(String major) {
+    public synchronized void setMajor(String major) {
         this.major = major;
     }
 
-    public void setGpa(double gpa) {
+    public synchronized void setGpa(double gpa) {
         this.gpa = gpa;
     }
 
-    public void setId(int id) {
+    public synchronized void setId(int id) {
         this.id = id;
     }
 
