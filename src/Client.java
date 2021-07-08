@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Client {
     public static void main(String[] args) {
@@ -14,7 +15,14 @@ public class Client {
             String userInput = null;
 
             while (!"quit".equals(userInput)){
-
+                try{
+                    TimeUnit.MILLISECONDS.sleep(500);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                while(in.ready()) {
+                    System.out.println(in.readLine());
+                }
                 // reading from user
                 userInput = scanner.nextLine();
 
@@ -22,7 +30,8 @@ public class Client {
                 out.println(userInput);
 
                 // printing server response to the screen
-                //TODO: Write logic to handle server response (could be db records or an error message
+                //TODO: Write logic to handle server response (could be db records or an error message)
+
             }
             scanner.close();
         }
@@ -31,4 +40,6 @@ public class Client {
         }
 
     }
+
+
 }

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAOImpl implements StudentDAO {
@@ -21,11 +22,17 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public List<Student> selectAllStudents() {
-        return null;
+        List<Student> studentsList = new ArrayList<>();
+        studentsList.addAll(cache.values());
+        return studentsList;
     }
 
     @Override
     public boolean deleteStudent(int id) {
-        return false;
+        if (cache.remove(id) != null){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
