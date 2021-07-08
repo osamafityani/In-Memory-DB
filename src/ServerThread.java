@@ -173,7 +173,7 @@ class ServerThread extends Thread {
                 break;
             case 3:
                 out.println("New GPA:");
-                String gpa = in.readLine();
+                double gpa = Double.parseDouble(in.readLine());
                 updateGPA(student, gpa);
                 break;
         }
