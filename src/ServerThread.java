@@ -35,10 +35,10 @@ class ServerThread extends Thread {
                         createStudent(in, out);
                         break;
                     case 2:
-                        selectAllStudents(out);
+                        selectStudent(in, out);
                         break;
                     case 3:
-                        System.out.println("Update");
+                        updateStudent(in, out);
                         break;
                     case 4:
                         deleteStudent(in, out);
@@ -91,8 +91,22 @@ class ServerThread extends Thread {
         out.println("Student added successfully");
         out.println("=========================================");
     }
+    void selectStudent(BufferedReader in, PrintWriter out)throws IOException{
+        out.println("Choose one of the following operations:");
+        out.println("1. Select student by Id");
+        out.println("2. Select all students");
 
-    void selectStudent(BufferedReader in, PrintWriter out) throws IOException{
+        int userInput = Integer.parseInt(in.readLine());
+        switch (userInput){
+            case 1:
+                selectStudentById(in, out);
+                break;
+            case 2:
+                selectAllStudents(out);
+                break;
+        }
+    }
+    void selectStudentById(BufferedReader in, PrintWriter out) throws IOException{
         out.println("Student Id: ");
         int id = Integer.parseInt(in.readLine());
         Student student = studentService.selectStudent(id);
@@ -125,6 +139,57 @@ class ServerThread extends Thread {
         }else {
             out.println("Student not found");
         }
+    }
+
+    void updateStudent(BufferedReader in, PrintWriter out) throws IOException{
+        out.println("Student Id:");
+        int id = Integer.parseInt(in.readLine());
+        Student student = studentService.selectStudent(id);
+        out.println("=========================================");
+
+        if (student != null) {
+            out.println(student);
+        }else{
+            out.println("Student not found");
+            return ;
+        }
+
+        out.println("What do you want to change?");
+        out.println("1. Name");
+        out.println("2. Major");
+        out.println("3. GPA");
+
+        int userInput = Integer.parseInt(in.readLine());
+        switch (userInput){
+            case 1:
+                out.println("New Name:");
+                String name = in.readLine();
+                updateName(student, name);
+                break;
+            case 2:
+                out.println("New Major:");
+                String major = in.readLine();
+                updateMajor(student, major);
+                break;
+            case 3:
+                out.println("New GPA:");
+                String gpa = in.readLine();
+                updateGPA(student, gpa);
+                break;
+        }
+
+    }
+
+    void updateName(Student student, String name){
+        student.setName(name);
+    }
+
+    void updateMajor(Student student, String major){
+        student.setMajor(major);
+    }
+
+    void updateGPA(Student student, double gpa){
+        student.setGpa(gpa);
     }
 
 }

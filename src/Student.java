@@ -45,6 +45,10 @@ public class Student {
         this.gpa = gpa;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Id: " + this.id + " | " + "Name: " + this.name + " | " + "Major: " + this.major + " | " + "GPA: " + this.gpa;

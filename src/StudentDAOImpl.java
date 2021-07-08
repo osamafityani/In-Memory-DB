@@ -7,12 +7,13 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public void insertStudent(Student student) {
-        cache.put(Student.objectsCounter, student);
+        cache.put(student.getId(), student);
     }
 
     @Override
     public boolean updateStudent(Student student) {
-        return false;
+        return cache.put(student.getId(), student) != null;
+
     }
 
     @Override
@@ -29,10 +30,6 @@ public class StudentDAOImpl implements StudentDAO {
 
     @Override
     public boolean deleteStudent(int id) {
-        if (cache.remove(id) != null){
-            return true;
-        }else{
-            return false;
-        }
+        return cache.remove(id) != null;
     }
 }
