@@ -1,16 +1,25 @@
+import java.io.IOException;
 import java.util.List;
 
 public class StudentService {
+    private static StudentService instance;
+    private static StudentDAO studentDAO;
 
-    private StudentDAO studentDAO;
-
-    public StudentService(){
+    private StudentService(){
         studentDAO = new StudentDAOImpl();
     }
 
+    public static StudentService getInstance(){
+        if (instance == null){
+            instance = new StudentService();
+            studentDAO = new StudentDAOImpl();
+        }
+        return instance;
+    }
+
     // Create student
-    void insertStudent(Student student){
-        studentDAO.insertStudent(student);
+    void insertStudent(Student student, boolean toFile) throws IOException {
+        studentDAO.insertStudent(student, toFile);
     }
 
     // Update student
@@ -19,18 +28,18 @@ public class StudentService {
     }
 
     // Select student by id
-    Student selectStudent(int id){
+    Student selectStudent(int id) throws IOException {
         return studentDAO.selectStudent(id);
     }
 
     // Select students
-    List<Student> selectAllStudents(){
+    List<Student> selectAllStudents() throws IOException {
         return studentDAO.selectAllStudents();
     }
 
     // Delete student
-    boolean deleteStudent(int id){
-        return studentDAO.deleteStudent(id);
+    void deleteStudent(int id) throws IOException {
+        studentDAO.deleteStudent(id);
     }
 
 }

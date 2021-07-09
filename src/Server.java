@@ -19,14 +19,14 @@ public class Server {
 
 
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("Client disconnected...");
         }
         finally {
             if (server != null){
                 try{
                     server.close();
                 }catch (IOException e){
-                    e.printStackTrace();
+                    System.out.println("Client disconnected...");
                 }
             }
         }

@@ -16,7 +16,7 @@ public class Client {
 
             while (!"quit".equals(userInput)){
                 try{
-                    TimeUnit.MILLISECONDS.sleep(500);
+                    TimeUnit.MILLISECONDS.sleep(250);
                 }catch (InterruptedException e){
                     e.printStackTrace();
                 }
@@ -28,11 +28,8 @@ public class Client {
 
                 //sending userInput to the server
                 out.println(userInput);
-
-                // printing server response to the screen
-                //TODO: Write logic to handle server response (could be db records or an error message)
-
             }
+            out.println(userInput);
             scanner.close();
         }
         catch (IOException e){

@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.List;
+import java.util.Locale;
 
 
 class ServerThread extends Thread {
@@ -9,7 +10,8 @@ class ServerThread extends Thread {
     ServerThread(Socket clientSocket){
         this.clientSocket = clientSocket;
     }
-    StudentService studentService = new StudentService();
+
+    StudentService studentService = StudentService.getInstance();
 
     @Override
     public void run() {
@@ -30,7 +32,14 @@ class ServerThread extends Thread {
                 userInput = in.readLine();
                 System.out.println("Sent from the client" + clientSocket + " | Message: " + userInput);
 
-                switch (Integer.parseInt(userInput)){
+                int option;
+
+                if (userInput.equals("quit")){
+                    option = 5;
+                }else {
+                    option = Integer.parseInt(userInput);
+                }
+                switch (option){
                     case 1:
                         createStudent(in, out);
                         break;
@@ -43,6 +52,9 @@ class ServerThread extends Thread {
                     case 4:
                         deleteStudent(in, out);
                         break;
+                    case 5:
+                        saveToHDD();
+                        break;
                     default:
                         break;
                 }
@@ -53,7 +65,7 @@ class ServerThread extends Thread {
             }
 
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("Client disconnected...");
         }finally {
             try {
                 if (out != null) {
@@ -64,7 +76,7 @@ class ServerThread extends Thread {
                     clientSocket.close();
                 }
             }catch (IOException e){
-                e.printStackTrace();
+                System.out.println("Client disconnected...");
             }
         }
     }
@@ -75,6 +87,7 @@ class ServerThread extends Thread {
         out.println("2. Read");
         out.println("3. Update");
         out.println("4. Delete");
+        out.println("Type \"quit\" to leave...");
     }
 
     void createStudent(BufferedReader in, PrintWriter out) throws IOException{
@@ -90,7 +103,7 @@ class ServerThread extends Thread {
         student.setName(name);
         student.setMajor(major);
         student.setGpa(gpa);
-        studentService.insertStudent(student);
+        studentService.insertStudent(student, false);
         out.println("Student added successfully");
         out.println("=========================================");
     }
@@ -113,6 +126,7 @@ class ServerThread extends Thread {
         out.println("Student Id: ");
         int id = Integer.parseInt(in.readLine());
         Student student = studentService.selectStudent(id);
+
         out.println("=========================================");
 
         if (student != null) {
@@ -123,7 +137,7 @@ class ServerThread extends Thread {
         out.println("=========================================");
     }
 
-    void selectAllStudents(PrintWriter out){
+    void selectAllStudents(PrintWriter out) throws IOException{
         List<Student> studentList = studentService.selectAllStudents();
         out.println("=========================================");
         out.println( studentList.size() + " results found");
@@ -136,11 +150,23 @@ class ServerThread extends Thread {
     void deleteStudent(BufferedReader in, PrintWriter out) throws IOException{
         out.println("Student Id:");
         int id = Integer.parseInt(in.readLine());
-        boolean deleted = studentService.deleteStudent(id);
-        if (deleted){
-            out.println("Student deleted successfully");
-        }else {
+
+        Student student = studentService.selectStudent(id);
+        out.println("=========================================");
+
+        if (student != null) {
+            out.println(student);
+        }else{
             out.println("Student not found");
+            return ;
+        }
+
+        out.println("Do you want delete this record permanently...");
+        out.println("Type \"yes\" to continue...");
+
+        if (in.readLine().trim().equalsIgnoreCase("yes")){
+            studentService.deleteStudent(id);
+            out.println("Student deleted successfully");
         }
     }
 
@@ -183,16 +209,28 @@ class ServerThread extends Thread {
 
     }
 
-    void updateName(Student student, String name){
+    private void updateName(Student student, String name){
         student.setName(name);
+        System.out.println("Student updated Successfully...");
     }
 
-    void updateMajor(Student student, String major){
+    private void updateMajor(Student student, String major){
         student.setMajor(major);
+        System.out.println("Student updated Successfully...");
     }
 
-    void updateGPA(Student student, double gpa){
+    private void updateGPA(Student student, double gpa){
         student.setGpa(gpa);
+        System.out.println("Student updated Successfully...");
+    }
+
+    private void saveToHDD()throws IOException{
+
+        List<Student> students = studentService.selectAllStudents();
+        for (Student student: students){
+            studentService.insertStudent(student, true);
+        }
+
     }
 
 }

@@ -3,6 +3,7 @@ import java.util.Map;
 
 public class Cache<K, V> extends LinkedHashMap<K, V> {
     private static Cache instance;
+
     private int size;
 
     private Cache(int size){
@@ -15,6 +16,10 @@ public class Cache<K, V> extends LinkedHashMap<K, V> {
             instance = new Cache<K, V>(size);
         }
         return instance;
+    }
+
+    public int getSize() {
+        return size;
     }
 
     @Override

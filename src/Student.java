@@ -29,23 +29,32 @@ public class Student {
     }
 
     public synchronized void setName(String name) {
-        this.name = name;
+        if (name.length() <= 15) {
+            this.name = name;
+        }else{
+            System.out.println("The value you entered is too long...");
+        }
     }
 
     public synchronized void setMajor(String major) {
-        this.major = major;
+        if (major.length() <= 15) {
+            this.major = major;
+        }else{
+            System.out.println("The value you entered is too long...");
+        }
     }
 
     public synchronized void setGpa(double gpa) {
         this.gpa = gpa;
     }
 
-    public synchronized void setId(int id) {
+    public void setId(int id) {
         this.id = id;
+        objectsCounter--;
     }
 
     @Override
     public String toString() {
-        return "Id: " + this.id + " | " + "Name: " + this.name + " | " + "Major: " + this.major + " | " + "GPA: " + this.gpa;
+        return "Id: " + this.getId() + " | " + "Name: " + this.getName() + " | " + "Major: " + this.getMajor() + " | " + "GPA: " + this.getGpa();
     }
 }
