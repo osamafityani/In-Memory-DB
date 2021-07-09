@@ -7,9 +7,12 @@ public class Student {
     private String major;
     private double gpa;
 
-    public Student(){
+    private Student(){
         objectsCounter++;
         this.id = objectsCounter;
+    }
+    public static Student newInstance(){
+        return new Student();
     }
 
     public synchronized int getId() {

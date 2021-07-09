@@ -14,7 +14,7 @@ public class Client {
             Scanner scanner = new Scanner(System.in);
             String userInput = null;
 
-            while (!"quit".equals(userInput)){
+            while (!"quit".equalsIgnoreCase(userInput)){
                 try{
                     TimeUnit.MILLISECONDS.sleep(250);
                 }catch (InterruptedException e){

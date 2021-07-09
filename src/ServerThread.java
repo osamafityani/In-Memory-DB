@@ -99,7 +99,8 @@ class ServerThread extends Thread {
 
         out.println("Student's GPA:");
         double gpa = Double.parseDouble(in.readLine());
-        Student student = new Student();
+
+        Student student = Student.newInstance();
         student.setName(name);
         student.setMajor(major);
         student.setGpa(gpa);

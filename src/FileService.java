@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 public class FileService {
-    public static final int charactersPerLine = 50;
+    private static final int CHARACTERS_PER_LINE = 50;  // The total length of a student object when converted to string
     private static FileService instance;
 
     public static FileService getInstance(){
@@ -17,7 +17,8 @@ public class FileService {
         File file = new File(fileName);
         String data = "";
 
-        int bytesPerLine = charactersPerLine + 2;
+        // Adding two bytes to the total length because of the '\n' character at the end of the line
+        int bytesPerLine = CHARACTERS_PER_LINE + 2;
 
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         randomAccessFile.seek(bytesPerLine * line);
@@ -34,7 +35,7 @@ public class FileService {
         String major = studentInformation[2].trim();
         double gpa = Double.parseDouble(studentInformation[3].trim());
 
-        Student student = new Student();
+        Student student = Student.newInstance();
         student.setName(name);
         student.setMajor(major);
         student.setGpa(gpa);
@@ -45,10 +46,11 @@ public class FileService {
 
     public void writeStudent(String fileName, Student student, int line) throws IOException {
         File file = new File(fileName);
+
         String data = String.format("%03d", student.getId()) + "|" + String.format("%15s", student.getName()) + "|"
                 + String.format("%15s", student.getMajor()) + "|" + Double.toString(student.getGpa()) + "|";
 
-        int bytesPerLine = charactersPerLine + 2;
+        int bytesPerLine = CHARACTERS_PER_LINE + 2;
 
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         long cursor;
@@ -69,7 +71,7 @@ public class FileService {
         File file = new File(fileName);
         String data = String.format("%50s", "deleted");
 
-        int bytesPerLine = charactersPerLine + 2;
+        int bytesPerLine = CHARACTERS_PER_LINE + 2;
 
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         randomAccessFile.seek(bytesPerLine * line);
@@ -107,6 +109,6 @@ public class FileService {
         File file = new File(fileName);
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
 
-        return (int) (randomAccessFile.length() / charactersPerLine);
+        return (int) (randomAccessFile.length() / CHARACTERS_PER_LINE);
     }
 }

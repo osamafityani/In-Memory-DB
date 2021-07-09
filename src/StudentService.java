@@ -6,13 +6,13 @@ public class StudentService {
     private static StudentDAO studentDAO;
 
     private StudentService(){
-        studentDAO = new StudentDAOImpl();
+        studentDAO = StudentDAOImpl.getInstance();
     }
 
     public static StudentService getInstance(){
         if (instance == null){
             instance = new StudentService();
-            studentDAO = new StudentDAOImpl();
+            studentDAO = StudentDAOImpl.getInstance();
         }
         return instance;
     }

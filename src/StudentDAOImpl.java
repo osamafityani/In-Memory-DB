@@ -4,16 +4,28 @@ import java.util.List;
 
 public class StudentDAOImpl implements StudentDAO {
 
-    Cache<Integer, Student> cache = Cache.getInstance(2);
+    private static StudentDAOImpl instance;
+
+    private StudentDAOImpl(){};
+
+    public static StudentDAOImpl getInstance() {
+        if (instance == null){
+            instance = new StudentDAOImpl();
+        }
+        return instance;
+    }
+    private static final int CACHE_SIZE = 10;
+    Cache<Integer, Student> cache = Cache.getInstance(CACHE_SIZE);
     FileService fileService = new FileService();
-    String fileName = "students.dat";
-    String delimiter = "///!///";
+    private final String fileName = "students.dat";
+    private final String delimiter = "///!///";
 
     @Override
     public void insertStudent(Student student, boolean toFile) throws IOException {
         if (toFile) {
             fileService.writeStudent(fileName, student, student.getId());
         } else {
+            // Write least recently used entry to the file system when the cache is full
             if ((cache.size() == cache.getSize())) {
                 Student studentToBeRemoved = cache.entrySet().iterator().next().getValue();
                 fileService.writeStudent(fileName, studentToBeRemoved, studentToBeRemoved.getId());
