@@ -13,7 +13,7 @@ public class FileService {
         return instance;
     }
 
-    public Student readStudent(String fileName, int line, String delimiter) throws  IOException{
+    public Student readStudent(String fileName, int line, String delimiter) throws  IOException, StudentNotFoundException{
         File file = new File(fileName);
         String data = "";
 
@@ -25,7 +25,7 @@ public class FileService {
         data = randomAccessFile.readLine();
 
         if (data == null || data.trim().equals("deleted") ){
-            return null;
+            throw new StudentNotFoundException();
         }
 
         String[] studentInformation = data.split("\\|");
@@ -50,6 +50,7 @@ public class FileService {
         String data = String.format("%03d", student.getId()) + "|" + String.format("%15s", student.getName()) + "|"
                 + String.format("%15s", student.getMajor()) + "|" + Double.toString(student.getGpa()) + "|";
 
+        // Adding two bytes to the total length because of the '\n' character at the end of the line
         int bytesPerLine = CHARACTERS_PER_LINE + 2;
 
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
@@ -71,6 +72,7 @@ public class FileService {
         File file = new File(fileName);
         String data = String.format("%50s", "deleted");
 
+        // Adding two bytes to the total length because of the '\n' character at the end of the line
         int bytesPerLine = CHARACTERS_PER_LINE + 2;
 
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
@@ -78,7 +80,6 @@ public class FileService {
         randomAccessFile.write(data.getBytes());
         randomAccessFile.writeBytes(System.getProperty("line.separator"));
         randomAccessFile.close();
-
 
     }
 

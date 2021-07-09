@@ -1,6 +1,6 @@
 public class Student {
 
-    public static int objectsCounter = 0;
+    public static int studentsCounter = 0;
 
     private int id;
     private String name;
@@ -8,8 +8,8 @@ public class Student {
     private double gpa;
 
     private Student(){
-        objectsCounter++;
-        this.id = objectsCounter;
+        studentsCounter++;
+        this.id = studentsCounter;
     }
     public static Student newInstance(){
         return new Student();
@@ -53,7 +53,7 @@ public class Student {
 
     public void setId(int id) {
         this.id = id;
-        objectsCounter--;
+        studentsCounter--;
     }
 
     @Override

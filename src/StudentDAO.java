@@ -7,15 +7,15 @@ public interface StudentDAO {
     void insertStudent(Student student, boolean toFile) throws IOException;
 
     // Update student
-    boolean updateStudent(Student student);
+    boolean updateStudent(Student student) throws StudentNotFoundException;
 
     // Select student by id
-    Student selectStudent(int id) throws IOException;
+    Student selectStudent(int id) throws IOException, StudentNotFoundException;
 
     // Select students
-    List<Student> selectAllStudents() throws IOException;
+    List<Student> selectAllStudents() throws IOException, StudentNotFoundException;
 
     // Delete student
-    void deleteStudent(int id) throws IOException;
+    void deleteStudent(int id) throws IOException, StudentNotFoundException;
 
 }

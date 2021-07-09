@@ -1,7 +1,9 @@
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.Socket;
 import java.util.List;
-import java.util.Locale;
 
 
 class ServerThread extends Thread {
@@ -66,7 +68,9 @@ class ServerThread extends Thread {
 
         }catch (IOException e){
             System.out.println("Client disconnected...");
-        }finally {
+        }catch (StudentNotFoundException e){
+            out.println("Student not found");
+        } finally {
             try {
                 if (out != null) {
                     out.close();
@@ -108,7 +112,7 @@ class ServerThread extends Thread {
         out.println("Student added successfully");
         out.println("=========================================");
     }
-    void selectStudent(BufferedReader in, PrintWriter out)throws IOException{
+    void selectStudent(BufferedReader in, PrintWriter out)throws IOException, StudentNotFoundException{
         out.println("Choose one of the following operations:");
         out.println("1. Select student by Id");
         out.println("2. Select all students");
@@ -123,7 +127,7 @@ class ServerThread extends Thread {
                 break;
         }
     }
-    void selectStudentById(BufferedReader in, PrintWriter out) throws IOException{
+    void selectStudentById(BufferedReader in, PrintWriter out) throws IOException, StudentNotFoundException{
         out.println("Student Id: ");
         int id = Integer.parseInt(in.readLine());
         Student student = studentService.selectStudent(id);
@@ -133,12 +137,12 @@ class ServerThread extends Thread {
         if (student != null) {
             out.println(student);
         }else{
-            out.println("Student not found");
+            throw new StudentNotFoundException();
         }
         out.println("=========================================");
     }
 
-    void selectAllStudents(PrintWriter out) throws IOException{
+    void selectAllStudents(PrintWriter out) throws IOException, StudentNotFoundException{
         List<Student> studentList = studentService.selectAllStudents();
         out.println("=========================================");
         out.println( studentList.size() + " results found");
@@ -148,7 +152,7 @@ class ServerThread extends Thread {
         out.println("=========================================");
     }
 
-    void deleteStudent(BufferedReader in, PrintWriter out) throws IOException{
+    void deleteStudent(BufferedReader in, PrintWriter out) throws IOException, StudentNotFoundException{
         out.println("Student Id:");
         int id = Integer.parseInt(in.readLine());
 
@@ -158,8 +162,7 @@ class ServerThread extends Thread {
         if (student != null) {
             out.println(student);
         }else{
-            out.println("Student not found");
-            return ;
+            throw new StudentNotFoundException();
         }
 
         out.println("Do you want delete this record permanently...");
@@ -171,7 +174,7 @@ class ServerThread extends Thread {
         }
     }
 
-    void updateStudent(BufferedReader in, PrintWriter out) throws IOException{
+    void updateStudent(BufferedReader in, PrintWriter out) throws IOException, StudentNotFoundException{
         out.println("Student Id:");
         int id = Integer.parseInt(in.readLine());
         Student student = studentService.selectStudent(id);
@@ -180,8 +183,7 @@ class ServerThread extends Thread {
         if (student != null) {
             out.println(student);
         }else{
-            out.println("Student not found");
-            return ;
+            throw new StudentNotFoundException();
         }
 
         out.println("What do you want to change?");
@@ -225,7 +227,7 @@ class ServerThread extends Thread {
         System.out.println("Student updated Successfully...");
     }
 
-    private void saveToHDD()throws IOException{
+    private void saveToHDD()throws IOException, StudentNotFoundException{
 
         List<Student> students = studentService.selectAllStudents();
         for (Student student: students){

@@ -40,25 +40,25 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public Student selectStudent(int id) throws IOException {
+    public Student selectStudent(int id) throws IOException, StudentNotFoundException {
         if (cache.containsKey(id)){
             return cache.get(id);
         }else{
             Student student = fileService.readStudent(fileName, id, delimiter);
             if (student == null){
-                return null;
+                throw new StudentNotFoundException();
             }
             if (student.getId() == id){
                 cache.put(student.getId(), student);
                 return student;
             }else{
-                return null;
+                throw new StudentNotFoundException();
             }
         }
     }
 
     @Override
-    public List<Student> selectAllStudents() throws IOException {
+    public List<Student> selectAllStudents() throws IOException, StudentNotFoundException {
         List<Student> studentsList = new ArrayList<>();
 
         studentsList.addAll(cache.values());
@@ -76,7 +76,7 @@ public class StudentDAOImpl implements StudentDAO {
     }
 
     @Override
-    public void deleteStudent(int id) throws IOException {
+    public void deleteStudent(int id) throws IOException, StudentNotFoundException {
         if (cache.containsKey(id)) {
             cache.remove(id);
         }
